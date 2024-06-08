@@ -5,7 +5,7 @@ import { ProjectList } from "./_components/project-list";
 interface DashboardPageProps {
     searchParams: {
         search?: string,
-        favorites?: boolean
+        favorites?: string
     }
 };
 const DashboardPage = ({searchParams} : DashboardPageProps) => {

@@ -4,12 +4,14 @@ import { api } from "@/convex/_generated/api";
 import { useApiMutation } from "@/hooks/use-api-mutation";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface NewProjectButtonProps {
     orgId: string
     disabled?: boolean
 };
 export const NewProjectButton = ({ orgId, disabled }: NewProjectButtonProps) => {
+    const router = useRouter();
     const {mutate ,pending} = useApiMutation(api.project.create);
     const onClick = () => {
         mutate({
@@ -17,6 +19,7 @@ export const NewProjectButton = ({ orgId, disabled }: NewProjectButtonProps) => 
             orgId
         }).then((id) => {
             toast.success("Project created");
+            router.push(`/project/${id}`);
         }).catch((error) => {
             toast.error("error to create project");
         });

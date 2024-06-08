@@ -11,11 +11,12 @@ interface ProjectListProps {
     orgId: string;
     query: {
         search?: string;
-        favorites?: boolean;
+        favorites?: string;
     };
 };
 export const ProjectList = ({ orgId, query }: ProjectListProps) => {
-    const data = useQuery(api.projects.get, { orgId });
+    const data = useQuery(api.projects.get, { orgId, ...query });
+    
     if (data === undefined) return (
  
             <div>

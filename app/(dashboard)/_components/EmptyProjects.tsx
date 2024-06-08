@@ -6,7 +6,9 @@ import Image from "next/image";
 import { useOrganization } from "@clerk/nextjs";
 import { useApiMutation } from "@/hooks/use-api-mutation";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 export const EmptyProjects = () => {
+    const router = useRouter();
     const {organization} = useOrganization();
     const {mutate , pending} = useApiMutation(api.project.create);
     const onClick = () => {
@@ -15,7 +17,10 @@ export const EmptyProjects = () => {
             title: "New project",
             orgId: organization.id,
         })
-        .then((id) => { toast.success("Project created"); })
+            .then((id) => {
+                toast.success("Project created");
+                router.push(`/project/${id}`);
+         })
         .catch((error) => { toast.error("error to create project"); });
     }
     return (
