@@ -11,6 +11,17 @@ export const get = query({
             .withIndex("by_org", (q) => q.eq("orgId", args.orgId))
             .order("desc")
             .collect();
-        return projects;
+        const projectsWithFavoritesRelation = projects.map(async (project) => {
+            return ctx.db.query('userFavorites').withIndex("by_user_project", (q) =>
+                q.eq("userId", identity.subject).eq("projectId", project._id)
+            ).unique().then((favorite) => {
+                return {
+                    ...project,
+                    isFavorite: !!favorite
+                }
+            });
+        });
+        const projectsWithFavoritesBoolean = Promise.all(projectsWithFavoritesRelation);
+        return projectsWithFavoritesBoolean;
     }
 })

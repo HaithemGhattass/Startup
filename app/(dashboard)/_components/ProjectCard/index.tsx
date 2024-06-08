@@ -8,6 +8,10 @@ import { Footer } from "./footer"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Actions } from "@/components/actions"
 import { MoreHorizontal } from "lucide-react"
+import { api } from "@/convex/_generated/api"
+import { useApiMutation } from "@/hooks/use-api-mutation"
+import { toast } from "sonner"
+
 interface ProjectCardProps {
     id: string
     title: string
@@ -29,6 +33,22 @@ export const ProjectCard = ({
     const { userId } = useAuth();
     const creatorLabel = userId === creatorId ? "You" : creatorName;
     const creationTime = formatDistanceToNow(creationDate, { addSuffix: true });
+    const { 
+        mutate: onFavorite,
+        pending: PendingFavorite
+    } = useApiMutation(api.project.favorite)
+    const {
+        mutate: onUnfavorite,
+        pending: PendingUnfavorite
+    } = useApiMutation(api.project.unfavorite);
+    const ToggleFavorite = () => {
+        if (isfavourite) {
+            onUnfavorite({ id }).catch(() => { toast.error("Error to unfavorite project")});
+        } else {
+            onFavorite({ id, orgId }).catch(() => { toast.error("Error to favorite project")});
+        }
+    }
+
     return (
         <Link href={`/project/${id}`}>
             <div className="group aspect-[100/127] border rounded-lg flex flex-col justify-between overflow-hidden">
@@ -45,8 +65,8 @@ export const ProjectCard = ({
                     title={title}
                     creatorLabel={creatorLabel}
                     createdAtLabel={creationTime}
-                    onClick={() => { }}
-                    disabled={false}
+                    onClick={ToggleFavorite}
+                    disabled={PendingFavorite || PendingUnfavorite}
                 />
             </div>
         </Link>

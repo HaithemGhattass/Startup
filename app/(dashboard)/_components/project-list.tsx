@@ -58,7 +58,7 @@ export const ProjectList = ({ orgId, query }: ProjectListProps) => {
                     
                 />
                 {data.map((project) => (
-                    <ProjectCard key={project._id} id={project._id} title={project.title} creatorId={project.creatorId} creatorName={project.creatorName} creationDate={project._creationTime} orgId={project.orgId} isfavourite={false} />
+                    <ProjectCard key={project._id} id={project._id} title={project.title} creatorId={project.creatorId} creatorName={project.creatorName} creationDate={project._creationTime} orgId={project.orgId} isfavourite={project.isFavorite} />
                 ))}
                 </div>
         </div>
