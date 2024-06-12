@@ -13,8 +13,9 @@ interface ProjectListProps {
         search?: string;
         favorites?: string;
     };
+    onSelectProject: (projectId: string) => void;
 };
-export const ProjectList = ({ orgId, query }: ProjectListProps) => {
+export const ProjectList = ({ orgId, query, onSelectProject }: ProjectListProps) => {
     const data = useQuery(api.projects.get, { orgId, ...query });
     
     if (data === undefined) return (
@@ -59,7 +60,17 @@ export const ProjectList = ({ orgId, query }: ProjectListProps) => {
                     
                 />
                 {data.map((project) => (
-                    <ProjectCard key={project._id} id={project._id} title={project.title} creatorId={project.creatorId} creatorName={project.creatorName} creationDate={project._creationTime} orgId={project.orgId} isfavourite={project.isFavorite} />
+                    <ProjectCard
+                        key={project._id}
+                        id={project._id}
+                        title={project.title}
+                        creatorId={project.creatorId}
+                        creatorName={project.creatorName}
+                        creationDate={project._creationTime}
+                        orgId={project.orgId}
+                        isfavourite={project.isFavorite}
+                        onClick={() => onSelectProject(project._id)}
+                    />
                 ))}
                 </div>
         </div>
